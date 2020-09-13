@@ -1,8 +1,7 @@
-@import "https://fonts.googleapis.com/css2?family=Roboto&display=swap";
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 @import "./utils/vars.scss";
 @import "./utils/mixins.scss";
-
 
 body {
   background-color: $black;
@@ -18,6 +17,7 @@ body {
 
 @import "./components/layout.scss";
 @import "./components/banner.scss";
-@import "./components/tabs.scss";
 @import "./components/slider.scss";
+@import "./components/tabs.scss";
 @import "./components/about.scss";
+

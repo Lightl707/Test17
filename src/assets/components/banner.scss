@@ -1,16 +1,20 @@
 .banner {
-  &_bg {
-    background-image: url("https://image.tmdb.org/t/p/original/ta5oblpMlEcIPIS2YGcq9XEkWK2.jpg");
-    background-size: cover;
-    background-position: relative;
+  &__bg {
+    background-size: auto 100%;
+    background-position: right;
     background-repeat: no-repeat;
   }
 
-  &_inner {
-    padding: 200px 60px;
-    width: 50%;
+  &__inner {
+    height: 500px;
+    padding: 0 64px;
+    display: flex;
+    align-items: center;
+    width: 43%;
     background-image: linear-gradient(to right, $black 75%, transparent 100%);
+  }
 
+  &__content {
     h1 {
       font-size: 36px;
       margin-bottom: 24px;
@@ -28,5 +32,4 @@
       @include button;
     }
   }
-
 }

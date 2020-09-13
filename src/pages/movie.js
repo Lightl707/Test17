@@ -1,83 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { fetchMovie } from "../api/movies";
-import { fetchCast } from "../api/cast";
-import { fetchLikethis } from "../api/movies";
-import About from "../components/About";
+import { useParams } from "react-router-dom";
 import Banner from "../components/Banner";
-import Slider from "../components/Slider";
+import { fetchMovie, fetchSimilar } from "../api/movies";
 import Tabs from "../components/Tabs";
+import About from "../components/About";
+import Slider from "../components/Slider";
+import { fetchCredits } from "../api/cast";
 
 const tabs = ["О фильме", "Трейлеры", "Галерея"];
 
-
 const Movie = () => {
-    const [movie, setMovie] = useState(null);
-    const [cast, setCast] = useState([]);
-    const [likethis, setLikethis] = useState([]);
-    const [activeTab, setActiveTab] = useState(tabs[0]);
-    const { id: movieID } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [cast, setCast] = useState([]);
+  const [similar, setSimilar] = useState([]);
+  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const { id: movieID } = useParams();
 
-    useEffect(() => {
-        const getMovie = async () => {
-            const response = await fetchMovie(movieID);
+  useEffect(() => {
+    const getMovie = async () => {
+      const response = await fetchMovie(movieID);
 
-            if (response) setMovie(response);
-        };
+      if (response) setMovie(response);
+    };
 
-        getMovie();
+    getMovie();
+  }, [movieID]);
 
-    }, [movieID]);
+  useEffect(() => {
+    const getCast = async () => {
+      const response = await fetchCredits(movieID);
 
-    useEffect(() => {
-        const getCast = async () => {
-            const response = await fetchCast(movieID);
+      if (response.cast) setCast(response.cast);
+    };
 
-            if (response.cast) setCast(response.cast);
-        };
+    getCast();
+  }, [movieID]);
 
-        getCast();
+  useEffect(() => {
+    const getSimilar = async () => {
+      const response = await fetchSimilar(movieID);
 
-    }, [movieID]);
+      if (response) setSimilar(response.results);
+    };
 
-    // useEffect(() => {
-    //     const getLikethis = async () => {
-    //         const response = await fetchLikethis(movieID);
+    getSimilar();
+  }, [movieID]);
 
-    //         if (response) setLikethis(response.results);
-    //     };
+  if (!movie) return null;
 
-    //     getLikethis();
+  console.log(cast);
 
-    // }, [movieID]);
-
-
-    if (!movie) return null;
-
-
-    console.log(movie)
-
-    return (
-        <div className="movie">
-            <Banner data={movie} />
-            <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-            <div className="movie__content">
-                {activeTab === "О фильме" && (
-                    <>
-                        <About data={movie} />
-                        {<Slider
-                            title="Актерский состав"
-                            items={cast}
-                            titleKey="name"
-                            imgKey="profile_path"
-                        />}
-                    </>
-                )}
-
-            </div>
-            {/* <Slider items={likethis} title="Похожие фильмы" /> */}
-        </div>
-    )
+  return (
+    <div className="movie">
+      <Banner data={movie} />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <div className="movie__content">
+        {activeTab === "О фильме" && (
+          <>
+            <About data={movie} />
+            <Slider
+              title="Актерский состав"
+              items={cast}
+              titleKey="name"
+              imgKey="profile_path"
+            />
+          </>
+        )}
+      </div>
+      <Slider items={similar} title="Похожие фильмы" />
+    </div>
+  );
 };
 
 export default Movie;

@@ -1,49 +1,48 @@
-import React, {useState, useEffect} from 'react';
-import Banner from '../components/Banner'
+import React, { useState, useEffect } from "react";
+import Banner from "../components/Banner";
 import { fetchPopularMovies } from "../api/movies";
 import { fetchPopularTvs } from "../api/tv";
-import Slider from "../components/Slider"
+import Slider from "../components/Slider";
 
 const Main = () => {
-    const [popular, setPopular] = useState([])
-    const [popularTv, setPopularTv] = useState([])
+  const [popular, setPopular] = useState([]);
+  const [popularTv, setPopularTv] = useState([]);
 
-    useEffect(() => {
-        const getPopularMovies = async () => {
-            const res = await fetchPopularMovies();
+  useEffect(() => {
+    const getPopularMovies = async () => {
+      const res = await fetchPopularMovies();
 
-            console.log(res);
+      if (res) setPopular(res.results);
+    };
 
-            if (res) setPopular(res.results);
-        };
+    getPopularMovies();
+  }, []);
 
-        getPopularMovies();
-    }, []);
+  useEffect(() => {
+    const getPopularTvs = async () => {
+      const res = await fetchPopularTvs();
 
-    useEffect(() => {
-        const getPopularTvs = async () => {
-            const res = await fetchPopularTvs();
+      if (res) setPopularTv(res.results);
+    };
 
-            console.log(res);
+    getPopularTvs();
+  }, []);
 
-            if (res) setPopularTv(res.results);
-        };
+  const bannerData = [...popular, ...popularTv];
+  const randomData = bannerData[Math.floor(Math.random() * bannerData.length)];
 
-        getPopularTvs();
-    }, []);
-
-    const bannerData = [...popular, ...popularTv];
-    const randomData = bannerData[Math.floor(Math.random() * bannerData.length)];
-
-    return (
-        <div>
-            <Banner data={randomData} />
-            <Slider title="Популярные фильмы" items={popular} />
-            <Slider title="Популярные сериалы" items={popularTv} titleKey="name" />
-            
-        </div>
-    );
+  return (
+    <div>
+      <Banner data={randomData} />
+      <Slider title="Популярные фильмы" items={popular} />
+      <Slider
+        title="Популярные сериалы"
+        items={popularTv}
+        titleKey="name"
+        link="/tv"
+      />
+    </div>
+  );
 };
 
-
-export default Main
+export default Main;

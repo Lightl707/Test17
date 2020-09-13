@@ -1,82 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { fetchTv } from "../api/tv";
-import { fetchCast } from "../api/cast";
-import { fetchLikethis } from "../api/likethis";
-import About from "../components/About";
+import { useParams } from "react-router-dom";
 import Banner from "../components/Banner";
-import Slider from "../components/Slider";
+import { fetchTv, fetchSimilar } from "../api/tv";
 import Tabs from "../components/Tabs";
+import About from "../components/About";
+import Slider from "../components/Slider";
+import { fetchCredits } from "../api/cast";
 
 const tabs = ["О фильме", "Трейлеры", "Галерея"];
 
-
 const Tv = () => {
-    const [tv, setTv] = useState(null);
-    const [cast, setCast] = useState([]);
-    const [activeTab, setActiveTab] = useState(tabs[0]);
-    const { id: tvID } = useParams();
+  const [tv, setTv] = useState(null);
+  const [cast, setCast] = useState([]);
+  const [similar, setSimilar] = useState([]);
+  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const { id: tvID } = useParams();
 
-    useEffect(() => {
-        const getTv = async () => {
-            const response = await fetchTv(tvID);
+  useEffect(() => {
+    const getTv = async () => {
+      const response = await fetchTv(tvID);
 
-            if (response) setTv(response);
-        };
+      console.log(response);
 
-        getTv();
+      if (response) setTv(response);
+    };
 
-    }, [tvID]);
+    getTv();
+  }, [tvID]);
 
-    useEffect(() => {
-        const getCast = async () => {
-            const response = await fetchCast(tvID);
+  useEffect(() => {
+    const getCast = async () => {
+      const response = await fetchCredits(tvID);
 
-            if (response.cast) setCast(response.cast);
-        };
+      if (response.cast) setCast(response.cast);
+    };
 
-        getCast();
+    getCast();
+  }, [tvID]);
 
-    }, [tvID]);
+  useEffect(() => {
+    const getSimilar = async () => {
+      const response = await fetchSimilar(tvID);
 
-    useEffect(() => {
-        const getLikethis = async () => {
-            const response = await fetchLikethis(tvID);
+      if (response) setSimilar(response.results);
+    };
 
-            if (response.likethis) setCast(response.likethis);
-        };
+    getSimilar();
+  }, [tvID]);
 
-        getLikethis();
+  if (!tv) return null;
 
-    }, [tvID]);
+  console.log(cast);
 
-
-    if (!tv) return null;
-
-
-    console.log(tv)
-
-    return (
-        <div className="tv">
-            <Banner data={tv} />
-            <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-            <div className="tv__content">
-                {activeTab === "О фильме" && (
-                    <>
-                        <About data={tv} />
-                        {<Slider
-                            title="Актерский состав"
-                            items={cast}
-                            titleKey="name"
-                            imgKey="profile_path"
-                        />}
-                    </>
-                )}
-
-            </div>
-            <Slider items={similar} title="Похожие сериалы" items={popular} />
-        </div>
-    )
+  return (
+    <div className="tv">
+      <Banner data={tv} />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <div className="tv__content">
+        {activeTab === "О фильме" && (
+          <>
+            <About data={tv} />
+            <Slider
+              title="Актерский состав"
+              items={cast}
+              titleKey="name"
+              imgKey="profile_path"
+            />
+          </>
+        )}
+      </div>
+      <Slider items={similar} title="Похожие сериалы" />
+    </div>
+  );
 };
 
 export default Tv;

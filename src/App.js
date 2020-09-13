@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Layout from './layouts/DefoultLayout';
+import Layout from "./layouts/DefaultLayout";
 
 import Main from "./pages/main";
-import Movie from "./pages/movie"
+import Movie from "./pages/movie";
+import Tv from "./pages/tv";
 
-
-import "./asserts/all.scss";
-
+import "./assets/all.scss";
 
 const App = () => {
-  console.log(process.env.REACT_APP_API);
   return (
     <BrowserRouter>
       <Layout>
         <Switch>
-          <Route exact path='/' component={Main} />
-          <Route path='/movie/:id' component={Movie} />
-          <Route path='/tv/:id' component={Main} />
+          <Route exact path="/" component={Main} />
+          <Route path="/movie/:id" component={Movie} />
+          <Route path="/tv/:id" component={Tv} />
         </Switch>
       </Layout>
     </BrowserRouter>
