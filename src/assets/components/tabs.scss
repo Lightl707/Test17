@@ -1,0 +1,23 @@
+.tabs {
+    padding: 36px 0;
+    display: flex;
+    justify-content: center;
+
+    &_item {
+        opacity: 0.6;
+        font-size:20 px;
+        font-weight: 500;
+        margin: 0 24px;
+        padding: 16px 0;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+        
+        &_active {
+            opacity: 1;
+            border-bottom: 2px solid $white;
+        }
+    }
+}

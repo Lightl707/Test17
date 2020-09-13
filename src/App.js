@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Layout from './layouts/DefoultLayout';
 
-function App() {
+import Main from "./pages/main";
+import Movie from "./pages/movie"
+
+
+import "./asserts/all.scss";
+
+
+const App = () => {
+  console.log(process.env.REACT_APP_API);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Layout>
+        <Switch>
+          <Route exact path='/' component={Main} />
+          <Route path='/movie/:id' component={Movie} />
+          <Route path='/tv/:id' component={Main} />
+        </Switch>
+      </Layout>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

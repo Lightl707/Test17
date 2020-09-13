@@ -1,0 +1,14 @@
+@mixin button {
+    background-color: rgba($white, 0.2);
+    color: $white;
+    border: none;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+
+    img {
+        margin-right: 12px;
+    }
+}
